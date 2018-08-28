@@ -3,12 +3,22 @@ import AddOption from './AddOption';
 import Options from './Options';
 import Action from './Action';
 import Header from './Header';
+import OptionModal from './OptionModal';
+import Footer from './Footer';
 
 export default class IndecisionApp extends React.Component {
     state = {
-        options: []
+        options: [],
+        selectedOption: undefined
     };
 
+    handleClearOptionModal = () =>{
+       this.setState(() => {
+           return {
+            selectedOption: undefined
+           };
+       }); 
+    };
     handleDeleteOptions = () => {
         this.setState(() => ({
             options: []
@@ -38,7 +48,11 @@ export default class IndecisionApp extends React.Component {
     handlePick = () => {
         const rand = Math.floor(Math.random() * this.state.options.length);
         const optionSelected = this.state.options[rand];
-        alert(optionSelected);
+        this.setState (() => {
+            return {
+                selectedOption: optionSelected
+            }
+        });
     };
 
     componentDidMount() {
@@ -65,34 +79,22 @@ export default class IndecisionApp extends React.Component {
     };
 
     render() {
-        const subTitle = "Put your life in the hands of a computer";
-        return ( <div>
-            <
-            Header subTitle = {
-                subTitle
-            }
-            /> <
-            Action hasOptions = {
-                this.state.options.length > 0
-            }
-            handlePick = {
-                this.handlePick
-            }
-            /> <
-            Options options = {
-                this.state.options
-            }
-            handleDeleteOptions = {
-                this.handleDeleteOptions
-            }
-            handleDeleteOption = {
-                this.handleDeleteOption
-            }
-            /> <
-            AddOption handleAddOption = {
-                this.handleAddOption
-            }
-            /> </div>
+        const subTitle = "Put your life in the hands of a robot!";
+        return ( 
+            <div>
+                <Header subTitle = {subTitle}/> 
+                <div className="container">
+                    <Action hasOptions = {this.state.options.length > 0} handlePick = {this.handlePick}/> 
+                    <div className="widget">
+                        <Options options = {this.state.options}
+                            handleDeleteOptions = {this.handleDeleteOptions}
+                            handleDeleteOption = {this.handleDeleteOption}/>
+                        <AddOption handleAddOption = {this.handleAddOption}/> 
+                    </div>
+                </div>
+                <OptionModal selectedOption = {this.state.selectedOption} handleClearOptionModal = {this.handleClearOptionModal}/>
+                <Footer />
+            </div>
         );
 
     };
